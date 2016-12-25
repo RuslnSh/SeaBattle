@@ -17,7 +17,7 @@ public class Game implements Runnable{
 		if (running.compareAndSet(false, true)){
 			JFrame frame = new JFrame();
 			frame.setSize(Constants.DIM);
-			//frame.setResizable(false);
+			frame.setResizable(false);
 			frame.setLocationRelativeTo(null);
 			frame.setIgnoreRepaint(true);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

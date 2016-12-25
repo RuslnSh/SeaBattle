@@ -22,4 +22,12 @@ public class Cell {
 		this.y = y;
 	}
 	
+	public boolean equals(Object obj) {
+		Cell cell = (Cell) obj;
+		return this.x == cell.getX() && this.y == cell.getY();
+	}
+ 
+	public int hashCode() {
+		return x + y;
+	}
 }
