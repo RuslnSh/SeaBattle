@@ -4,12 +4,16 @@ import battle.sea.main.Cell;
 
 public class SeaCell extends Cell{
 	private boolean isShip;
-	private boolean isAround;
+	private boolean isAround;	// With this flag marked cells around ships
+	private boolean isPushed;
+	private boolean isAroundDrowned;	// Cells around DROWNED ships
 	
 	public SeaCell(int x, int y){
 		super(x,y);
 		setShip(false);
 		setAround(false);
+		setPushed(false);
+		setAroundDrowned(false);
 	}
 
 	public boolean isShip() {
@@ -31,6 +35,14 @@ public class SeaCell extends Cell{
 			this.isAround = isAround;
 	}
 	
+	public boolean isPushed() {
+		return isPushed;
+	}
+
+	public void setPushed(boolean isPushed) {
+		this.isPushed = isPushed;
+	}
+	
 	public boolean nearShip(SeaCell ship){
 		if (this.getX() == ship.getX())
 			if (this.getY() == ship.getY()+1 || this.getY() == ship.getY()-1)
@@ -46,7 +58,15 @@ public class SeaCell extends Cell{
 			(this.getX() == ship.getX()-1 && this.getY() == ship.getY()+1))
 				return true;
 		
-		
 		return false;
 	}
+
+	public boolean isAroundDrowned() {
+		return isAroundDrowned;
+	}
+
+	public void setAroundDrowned(boolean isAroundDrowned) {
+		this.isAroundDrowned = isAroundDrowned;
+	}
+
 }

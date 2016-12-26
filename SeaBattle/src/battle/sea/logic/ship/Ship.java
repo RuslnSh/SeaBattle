@@ -4,9 +4,11 @@ import battle.sea.logic.ship.ShipCell;
 
 public class Ship {
 	private ShipCell[] ship;
+	private boolean isDrowned;
 	
 	public Ship(int length, int x, int y, int direction){
 		ship = new ShipCell[length];
+		setDrowned(false);
 		
 		switch(direction){
 		case 1: 
@@ -49,5 +51,22 @@ public class Ship {
 	
 	public int getLength(){
 		return getShip().length;
+	}
+
+	public boolean isDrowned() {
+		for(int i=0;i<ship.length;i++)
+			if (!ship[i].isHit())
+				return false;
+		
+		setDrowned(true);
+		return true;
+	}
+
+	public boolean isDrownedProp() {
+		return isDrowned;
+	}
+
+	public void setDrowned(boolean isDrowned) {
+		this.isDrowned = isDrowned;
 	}
 }

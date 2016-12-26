@@ -24,7 +24,8 @@ public class GraphicsModule extends Canvas{
 	private MouseModule mModule;
 	
 	private AimCell aim;
-	private	PlaceShips ps;
+	private	PlaceShips psPlayer;
+	private	PlaceShips psRobot;
 	
 	private Graphics g;
 	
@@ -35,7 +36,8 @@ public class GraphicsModule extends Canvas{
 		this.addMouseListener(mModule);
 		
 		aim = new AimCell(0,0);
-		ps = new PlaceShips();
+		psPlayer = new PlaceShips();
+		psRobot = new PlaceShips();
 	}
 	
 	public void render(){
@@ -53,6 +55,13 @@ public class GraphicsModule extends Canvas{
 		draw();
 		
 		bufferStrategy.show();
+	}
+	
+	private void draw(){
+		drawGrid();
+		drawText();
+		drawShips();
+		drawAim();
 	}
 	
 	private void drawGrid(){
@@ -74,13 +83,6 @@ public class GraphicsModule extends Canvas{
 			g.drawLine(i, Constants.HEIGHT_1, i, Constants.HEIGHT_2);
 	}
 	
-	private void draw(){
-		drawGrid();
-		drawText();
-		drawShips();
-		drawAim();
-	}
-	
 	private void drawText(){
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 22));
@@ -99,23 +101,40 @@ public class GraphicsModule extends Canvas{
 	}
 	
 	private void drawShips(){
-		for (SeaCell sc:ps.getSeaArr()){
-			if(sc.isAround()){
-				g.setColor(Color.YELLOW);
-				g.fillRect(sc.getX()*Constants.SCALE+Constants.WIDTH_3, sc.getY()*Constants.SCALE+Constants.HEIGHT_1, Constants.SCALE, Constants.SCALE);
+		for (SeaCell sc:psPlayer.getSeaArr()){
+			if(sc.isPushed() || sc.isAroundDrowned()){
+				g.setColor(new Color(200,200,200));
+				g.fillRect(sc.getX()*Constants.SCALE+Constants.WIDTH_1, sc.getY()*Constants.SCALE+Constants.HEIGHT_1, Constants.SCALE, Constants.SCALE);
 			} else if (sc.isShip()){
 				g.setColor(Color.BLUE);
+				g.fillRect(sc.getX()*Constants.SCALE+Constants.WIDTH_1, sc.getY()*Constants.SCALE+Constants.HEIGHT_1, Constants.SCALE, Constants.SCALE);
+			}
+		}
+		
+		for (Ship ship:psPlayer.getShips()){
+			for (int i=0;i<ship.getLength();i++){
+				if (ship.getShipCell(i).isHit()){
+					g.setColor(Color.BLACK);
+					g.fillRect(ship.getX(i)*Constants.SCALE+Constants.WIDTH_1, ship.getY(i)*Constants.SCALE+Constants.HEIGHT_1, Constants.SCALE, Constants.SCALE);
+				}
+			}
+		}
+		
+		for (SeaCell sc:psRobot.getSeaArr()){
+			if(sc.isPushed() || sc.isAroundDrowned()){
+				g.setColor(new Color(200,200,200));
 				g.fillRect(sc.getX()*Constants.SCALE+Constants.WIDTH_3, sc.getY()*Constants.SCALE+Constants.HEIGHT_1, Constants.SCALE, Constants.SCALE);
 			}
 		}
 		
-/*		g.setColor(Color.BLUE);
-		for (Ship ship:ps.getShips()){
+		for (Ship ship:psRobot.getShips()){
 			for (int i=0;i<ship.getLength();i++){
-				g.fillRect(ship.getX(i)*Constants.SCALE+Constants.WIDTH_3, ship.getY(i)*Constants.SCALE+Constants.HEIGHT_1, Constants.SCALE, Constants.SCALE);
+				if (ship.getShipCell(i).isHit()){
+					g.setColor(Color.BLACK);
+					g.fillRect(ship.getX(i)*Constants.SCALE+Constants.WIDTH_3, ship.getY(i)*Constants.SCALE+Constants.HEIGHT_1, Constants.SCALE, Constants.SCALE);
+				}
 			}
 		}
-*/
 	}
 	
 	private void drawAim(){
@@ -143,6 +162,18 @@ public class GraphicsModule extends Canvas{
 	                	if (aim.getX() > 0)
 	                		aim.setX(aim.getX()-1);
 	                    break;
+	                case KeyEvent.VK_ENTER:
+	                	psPlayer.attack(aim.getX(), aim.getY());
+	                	psRobot.attack(aim.getX(), aim.getY());
+	                	
+	                	if(psRobot.isGameOver()){
+	                		System.out.println("Player Win!!!");
+	                	}
+	                	if(psPlayer.isGameOver()){
+	                		System.out.println("Robot Win!!!");
+	                	}
+	                	
+	                	break;
 	            }
 	}
 	

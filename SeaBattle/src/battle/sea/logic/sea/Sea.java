@@ -29,6 +29,13 @@ public class Sea {
 		return null;
 	}
 	
+	public SeaCell getSeaCell(int x, int y){
+		for (SeaCell s:sea)
+				if (s.equals(x, y))
+					return s;
+		return null;
+	}
+	
 	public void surroundShip(Object obj){		
 		SeaCell seacell = getSeaCell(obj);
 		seacell.setShip(true);
@@ -36,6 +43,15 @@ public class Sea {
 		for (SeaCell sc:sea)
 			if (sc.nearShip(seacell))
 				sc.setAround(true);
+	}
+	
+	public void surroundDrownedShip(Object obj){		
+		SeaCell seacell = getSeaCell(obj);
+		seacell.setShip(true);
+		
+		for (SeaCell sc:sea)
+			if (sc.nearShip(seacell))
+				sc.setAroundDrowned(true);
 	}
 	
 	/*public int getSeaCellLength(){

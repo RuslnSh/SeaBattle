@@ -3,7 +3,7 @@ package battle.sea.logic.ship;
 import battle.sea.main.Cell;
 
 public class ShipCell extends Cell{
-	private boolean hit;
+	private boolean isHit;
 	
 	public ShipCell(int x, int y) {
 		super(x, y);
@@ -11,11 +11,11 @@ public class ShipCell extends Cell{
 	}
 
 	public boolean isHit() {
-		return hit;
+		return isHit;
 	}
 
 	public void setHit(boolean hit) {
-		this.hit = hit;
+		this.isHit = hit;
 	}
 	
 }

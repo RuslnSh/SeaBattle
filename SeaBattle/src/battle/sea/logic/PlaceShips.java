@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import battle.sea.logic.sea.Sea;
 import battle.sea.logic.sea.SeaCell;
 import battle.sea.logic.ship.Ship;
+import battle.sea.logic.ship.ShipCell;
 import battle.sea.main.Constants;
 
 public class PlaceShips {
@@ -125,6 +126,36 @@ public class PlaceShips {
 			ships.add(ship);
 		}
 	}
+		
+	public void attack(int x, int y){
+		System.out.println(x + " " + y);
+		
+		SeaCell cell = sea.getSeaCell(x, y);
+		cell.setPushed(true);
+		
+		if (cell.isShip())
+			for (Ship ship:getShips())
+				for(int i=0;i<ship.getLength();i++){
+					ShipCell sc = ship.getShipCell(i);
+					if (sc.equals(x, y)){
+						sc.setHit(true);
+						
+						if (ship.isDrowned())
+							for (int c=0;c<ship.getLength();c++)
+								sea.surroundDrownedShip(ship.getShipCell(c));
+						
+						return;
+					}
+				}
+	}
+	
+	public boolean isGameOver(){
+		for (Ship ship:ships)
+			if (!ship.isDrownedProp())
+				return false;
+		
+		return true;
+	}
 	
 	public ArrayList<Ship> getShips(){
 		return ships;
@@ -134,7 +165,7 @@ public class PlaceShips {
 		return sea.getSeaCellArr();
 	}
 	
-	/*public int getLength(){
+	/*public int getShipLength(){
 		return ships.size();
 	}
 	
