@@ -3,10 +3,10 @@ package battle.sea.main;
 import java.awt.Dimension;
 
 public class Constants {
-	public static final int SCALE = 30;
 	/* 
-	 * Grid step
+	 * Grid step and scale
 	 * */
+	public static final int SCALE = 30;
 	public static final int START_STEP = 0;
 	public static final int WIDTH_STEP = 10;
 	public static final int HEIGHT_STEP = 10;
@@ -20,9 +20,11 @@ public class Constants {
 	public static final int TOP = 20;
 	public static final int BOTTOM = 100;
 	
+	/*
+	 * Axis
+	 * */
 	public static final String[] num_arr = {"0","1","2","3","4","5","6","7","8","9"};
-	public static final String[] char_arr = {"0","1","2","3","4","5","6","7","8","9"};
-	//public static final String[] char_arr = {"A","B","C","D","E","F","G","H","I","J"};
+	public static final String[] char_arr = {"A","B","C","D","E","F","G","H","I","J"};
 	
 	/*
 	 * WIDTH_1 : WIDTH_2 - first field
@@ -41,5 +43,27 @@ public class Constants {
 	public static final int HEIGHT_2 = HEIGHT_1+HEIGHT;
 	public static final int HEIGHT_3 = HEIGHT_2+BOTTOM;
 	
+	/*
+	 * Screen size
+	 * */
 	public static final Dimension DIM = new Dimension(WIDTH_5, HEIGHT_3);
+	
+	/*
+	 * 1 - Random attack
+	 * 2 - Cheat Random attack
+	 * */
+	public static final int ATTACK_ALGORITM = 1;
+	
+	/*
+	 * 1 - Random place
+	 * */
+	public static final int PLACE_ALGORITM = 1;
+	
+	/*
+	 * Number of ships
+	 * */
+	public static final int CNT_4 = 1;
+	public static final int CNT_3 = 2;
+	public static final int CNT_2 = 3;
+	public static final int CNT_1 = 4;
 }

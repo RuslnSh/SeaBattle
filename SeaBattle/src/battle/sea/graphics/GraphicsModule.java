@@ -28,6 +28,7 @@ public class GraphicsModule extends Canvas{
 	private	PlaceShips psRobot;
 	
 	private Graphics g;
+	private int winner;
 	
 	public GraphicsModule(){	
 		kModule = new KeyboardModule();
@@ -36,8 +37,7 @@ public class GraphicsModule extends Canvas{
 		this.addMouseListener(mModule);
 		
 		aim = new AimCell(0,0);
-		psPlayer = new PlaceShips();
-		psRobot = new PlaceShips();
+		setWinner(0);
 	}
 	
 	public void render(){
@@ -45,6 +45,10 @@ public class GraphicsModule extends Canvas{
 		if (bufferStrategy == null){ 
 			createBufferStrategy(2);
 			requestFocus();
+			
+			psPlayer = new PlaceShips(Constants.PLACE_ALGORITM);
+			psRobot = new PlaceShips(Constants.PLACE_ALGORITM);
+			
 			return;
 		}
 		
@@ -147,7 +151,7 @@ public class GraphicsModule extends Canvas{
 	        for (KeyEvent event : kModule.getKeyPressed())
 	            switch (event.getKeyCode()) {
 		            case KeyEvent.VK_UP:
-		            	if (aim.getY() > 0)
+		            	if (aim.getY() > Constants.START_STEP)
 		            		aim.setY(aim.getY()-1);
 	                    break;
 	                case KeyEvent.VK_RIGHT:
@@ -159,22 +163,26 @@ public class GraphicsModule extends Canvas{
 	                		aim.setY(aim.getY()+1);
 	                    break;
 	                case KeyEvent.VK_LEFT:
-	                	if (aim.getX() > 0)
+	                	if (aim.getX() > Constants.START_STEP)
 	                		aim.setX(aim.getX()-1);
 	                    break;
 	                case KeyEvent.VK_ENTER:
-	                	psPlayer.attack(aim.getX(), aim.getY());
-	                	psRobot.attack(aim.getX(), aim.getY());
-	                	
-	                	if(psRobot.isGameOver()){
-	                		System.out.println("Player Win!!!");
-	                	}
-	                	if(psPlayer.isGameOver()){
-	                		System.out.println("Robot Win!!!");
-	                	}
-	                	
+	                	attack();
 	                	break;
 	            }
+	}
+	
+	private void attack(){
+		psRobot.attack(aim.getX(), aim.getY());
+    	
+    	SeaCell cell4attack = psPlayer.getAttackCoordiantes(Constants.ATTACK_ALGORITM);
+    	psPlayer.attack(cell4attack.getX(), cell4attack.getY());
+    	
+    	if(psRobot.isGameOver())
+    		setWinner(1);
+    	
+    	if(psPlayer.isGameOver())
+    		setWinner(2);
 	}
 	
 	private void processMouseAdapter(){
@@ -183,11 +191,26 @@ public class GraphicsModule extends Canvas{
 				int highX = (int)(p.getX()-Constants.WIDTH_3)/Constants.SCALE;
 				int highY = (int)(p.getY()-Constants.HEIGHT_1)/Constants.SCALE;
 				
-				if (highX >= 0 && highX < Constants.WIDTH_STEP && highY >= 0 && highY < Constants.HEIGHT_STEP){
+				if (highX >= Constants.START_STEP && highX < Constants.WIDTH_STEP && highY >= Constants.START_STEP && highY < Constants.HEIGHT_STEP){
 					aim.setX(highX);
 					aim.setY(highY);
 				}
 			}
+		}
+	}
+
+	public int getWinner() {
+		return winner;
+	}
+
+	public void setWinner(int winner) {
+		this.winner = winner;
+	}
+	
+	public void dispose(){
+		if (bufferStrategy != null){
+			bufferStrategy.dispose();
+			setWinner(0);
 		}
 	}
 }
